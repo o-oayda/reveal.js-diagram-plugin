@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reveal Flowchart Demo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/white.css">
+    <link rel="stylesheet" href="../revealjs-diagram.css">
+    <style>
+      .reveal h2 {
+        color: #23373b;
+      }
+
+      .reveal-flowchart {
+        margin-top: 0.4em;
+      }
+
+      .reveal-flowchart.demo-simple {
+        width: min(100%, 760px);
+      }
+
+      .reveal-flowchart.demo-tree {
+        width: min(100%, 860px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h2>Original Intro Shape</h2>
+          <div class="reveal-flowchart demo-simple"
+               data-flowchart-id="intro-ab"
+               data-flowchart-arrowheads="false"
+               data-flowchart-fragments="true"
+               data-flowchart-node-width="86"
+               data-flowchart-node-height="56"
+               data-flowchart-gap="160"
+               style="--flowchart-transition: 1200ms cubic-bezier(0.25, 0.85, 0.35, 1);">
+            <script type="application/json">
+            {
+              "direction": "horizontal",
+              "steps": [
+                {
+                  "id": "a",
+                  "label": "A"
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "after": "a"
+                }
+              ]
+            }
+            </script>
+          </div>
+        </section>
+
+        <section>
+          <h2>Basic Diagram</h2>
+          <div class="reveal-flowchart demo-tree"
+               data-flowchart-id="basic"
+               data-flowchart-arrowheads="false"
+               data-flowchart-fragments="true"
+               data-flowchart-interrupt="snap"
+               data-flowchart-node-width="130"
+               data-flowchart-node-height="52"
+               data-flowchart-gap="56">
+            <script type="application/json">
+            {
+              "direction": "tree",
+              "levelGap": 110,
+              "steps": [
+                { "id": "root" },
+                { "id": "child-1" },
+                { "id": "child-2" },
+                { "id": "sub-child-1" },
+                { "id": "sub-child-2" }
+              ],
+              "nodes": [
+                { "id": "root", "label": "root", "showAt": 0 },
+                { "id": "child-1", "label": "child 1", "parent": "root", "showAt": 1 },
+                { "id": "child-2", "label": "child 2", "parent": "root", "showAt": 2 },
+                { "id": "sub-child-1", "label": "sub-child 1", "parent": "child-1", "showAt": 3 },
+                { "id": "sub-child-2", "label": "sub-child 2", "parent": "child-1", "showAt": 4 }
+              ]
+            }
+            </script>
+          </div>
+        </section>
+
+        <section>
+          <h2>Closed Diagram</h2>
+          <div class="reveal-flowchart demo-tree"
+               data-flowchart-id="closed"
+               data-flowchart-arrowheads="false"
+               data-flowchart-fragments="true"
+               data-flowchart-interrupt="snap"
+               data-flowchart-node-width="130"
+               data-flowchart-node-height="52"
+               data-flowchart-gap="56">
+            <script type="application/json">
+            {
+              "direction": "tree",
+              "levelGap": 110,
+              "steps": [
+                { "id": "root" },
+                { "id": "child-1" },
+                { "id": "child-2" },
+                { "id": "child-3" },
+                { "id": "tail" },
+                { "id": "child-1-tail" },
+                { "id": "child-3-tail" }
+              ],
+              "nodes": [
+                { "id": "root", "label": "root", "showAt": 0 },
+                { "id": "child-1", "label": "child 1", "parent": "root", "showAt": 1 },
+                { "id": "child-2", "label": "child 2", "parent": "root", "showAt": 2 },
+                { "id": "child-3", "label": "child 3", "parent": "root", "showAt": 3 },
+                { "id": "tail", "label": "tail", "parent": "child-2", "showAt": 4 }
+              ],
+              "links": [
+                { "source": "child-1", "target": "tail", "showAt": 5, "arrowhead": false },
+                { "source": "child-3", "target": "tail", "showAt": 6, "arrowhead": false }
+              ]
+            }
+            </script>
+          </div>
+        </section>
+
+        <section>
+          <h2>Combined Steps</h2>
+          <div class="reveal-flowchart demo-tree"
+               data-flowchart-id="combined"
+               data-flowchart-arrowheads="false"
+               data-flowchart-fragments="true"
+               data-flowchart-interrupt="snap"
+               data-flowchart-node-width="130"
+               data-flowchart-node-height="52"
+               data-flowchart-gap="56">
+            <script type="application/json">
+            {
+              "direction": "tree",
+              "levelGap": 110,
+              "steps": [
+                { "id": "root" },
+                { "id": "children" },
+                { "id": "tail" },
+                { "id": "links" }
+              ],
+              "nodes": [
+                { "id": "root", "label": "root", "showAt": 0 },
+                { "id": "child-1", "label": "child 1", "parent": "root", "showAt": 1 },
+                { "id": "child-2", "label": "child 2", "parent": "root", "showAt": 1 },
+                { "id": "child-3", "label": "child 3", "parent": "root", "showAt": 1 },
+                { "id": "tail", "label": "tail", "parent": "child-2", "showAt": 2 }
+              ],
+              "links": [
+                { "source": "child-1", "target": "tail", "showAt": 3, "arrowhead": false },
+                { "source": "child-3", "target": "tail", "showAt": 3, "arrowhead": false }
+              ]
+            }
+            </script>
+          </div>
+        </section>
+
+        <section>
+          <h2>Simulations</h2>
+          <div class="reveal-flowchart"
+               data-flowchart-id="simulations"
+               data-flowchart-fragments="true">
+            <script type="application/json">
+            {
+              "direction": "vertical",
+              "steps": [
+                {
+                  "id": "sources",
+                  "label": "Draw sources on isotropic sky<br>sample magnitudes"
+                },
+                {
+                  "id": "relativity",
+                  "label": "Do special relativity",
+                  "after": "sources"
+                },
+                {
+                  "id": "errors",
+                  "label": "Add photometric <span class='accent'>errors</span><br><em>m′ν → m′ν + <span class='accent'>Δm′ν</span></em>",
+                  "after": "relativity"
+                },
+                {
+                  "id": "cuts",
+                  "label": "Make magnitude cuts & mask",
+                  "after": "errors"
+                },
+                {
+                  "id": "output",
+                  "label": "<strong>Output:</strong> CatSIM density map",
+                  "after": "cuts"
+                }
+              ]
+            }
+            </script>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+    <script src="../revealjs-diagram.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        plugins: [RevealFlowchart]
+      });
+    </script>
+  </body>
+</html>

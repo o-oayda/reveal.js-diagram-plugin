@@ -1,0 +1,12 @@
+{
+  "name": "reveal-flowchart-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Modern Reveal.js SVG flowchart plugin",
+  "scripts": {
+    "build": "node --check revealjs-diagram.js",
+    "test": "node --check revealjs-diagram.js",
+    "deploy:dipole-talks": "npm run build && mkdir -p /home/oliver/Documents/dipole-talks/plugins/reveal-flowchart && cp revealjs-diagram.js revealjs-diagram.css /home/oliver/Documents/dipole-talks/plugins/reveal-flowchart/"
+  },
+  "license": "MIT"
+}
