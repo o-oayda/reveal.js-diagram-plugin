@@ -57,7 +57,7 @@
 
     if (deck && typeof deck.on === "function") {
       deck.on("ready", updateAll);
-      deck.on("slidechanged", updateAll);
+      deck.on("slidechanged", renderAll);
       deck.on("fragmentshown", updateAll);
       deck.on("fragmenthidden", updateAll);
       deck.on("resize", renderAll);
