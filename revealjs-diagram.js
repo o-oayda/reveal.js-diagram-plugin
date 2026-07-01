@@ -726,6 +726,55 @@
     el.classList.toggle("is-visible", visible);
   }
 
+  function syncPrintPages() {
+    Array.prototype.forEach.call(document.querySelectorAll(".pdf-page .reveal-flowchart"), syncPrintChart);
+  }
+
+  function syncPrintChart(el) {
+    var id = el.getAttribute("data-flowchart-id");
+    if (!id) return;
+
+    var definition = printDefinition(el);
+    if (!definition || !Array.isArray(definition.steps) || definition.steps.length === 0) return;
+
+    var steps = normaliseDefinition(definition).steps;
+    var initialVisible = getInitialVisible(el);
+    var activeCount = printActiveStepCount(el, id, steps, initialVisible);
+
+    steps.forEach(function (step, index) {
+      var visible = index < activeCount;
+      setVisible(el.querySelector('[data-flowchart-step="' + attrSelectorValue(step.id) + '"]'), visible);
+      setVisible(el.querySelector('[data-flowchart-target="' + attrSelectorValue(step.id) + '"]'), visible);
+    });
+  }
+
+  function printDefinition(el) {
+    var script = el.querySelector('script[type="application/json"]');
+    if (script) return parseDefinition(el);
+
+    var chart = charts.find(function (candidate) {
+      return candidate.id === el.getAttribute("data-flowchart-id");
+    });
+    return chart ? chart.definition : null;
+  }
+
+  function printActiveStepCount(el, id, steps, initialVisible) {
+    var selector = '.fragment.visible[data-flowchart-show^="' + attrSelectorValue(id + ":") + '"]';
+    var visibleStepIndexes = Array.prototype.map.call(el.closest("section").querySelectorAll(selector), function (fragment) {
+      var value = fragment.getAttribute("data-flowchart-show") || "";
+      var stepId = value.slice(id.length + 1);
+      return findStepIndex(steps, stepId);
+    }).filter(function (index) {
+      return index >= 0;
+    });
+
+    if (visibleStepIndexes.length === 0) {
+      return Math.min(initialVisible, steps.length);
+    }
+
+    return Math.min(Math.max.apply(Math, visibleStepIndexes) + 1, steps.length);
+  }
+
   function typesetMath(el) {
     if (!window.MathJax) return;
 
@@ -796,6 +845,7 @@
   var api = plugin();
   api.renderAll = renderAll;
   api.update = updateAll;
+  api.syncPrintPages = syncPrintPages;
   api.destroy = function () {
     if (resizeHandler) window.removeEventListener("resize", resizeHandler);
   };
