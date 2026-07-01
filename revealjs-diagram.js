@@ -145,6 +145,7 @@
         var fragment = document.createElement("span");
         fragment.className = "fragment reveal-flowchart-fragment";
         fragment.setAttribute("data-flowchart-show", chart.id + ":" + step.id);
+        fragment.setAttribute("data-fragment-index", step.index);
         fragment.setAttribute("aria-hidden", "true");
         slide.appendChild(fragment);
         return fragment;
@@ -798,6 +799,48 @@
   api.destroy = function () {
     if (resizeHandler) window.removeEventListener("resize", resizeHandler);
   };
+
+  registerWithReveal(api);
+
+  function registerWithReveal(api) {
+    var root = typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : null;
+    if (!root) return;
+
+    if (root.Reveal && typeof root.Reveal.registerPlugin === "function") {
+      root.Reveal.registerPlugin(api);
+      return;
+    }
+
+    var descriptor = Object.getOwnPropertyDescriptor(root, "Reveal");
+    if (descriptor && descriptor.configurable === false) return;
+
+    var pendingReveal = descriptor && "value" in descriptor ? descriptor.value : undefined;
+    try {
+      Object.defineProperty(root, "Reveal", {
+        configurable: true,
+        enumerable: true,
+        get: function () {
+          return pendingReveal;
+        },
+        set: function (value) {
+          pendingReveal = value;
+          Object.defineProperty(root, "Reveal", {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: value
+          });
+          if (value && typeof value.registerPlugin === "function") {
+            value.registerPlugin(api);
+          }
+        }
+      });
+    } catch (error) {
+      if (window.console) {
+        console.warn("RevealFlowchart: automatic plugin registration failed", error);
+      }
+    }
+  }
 
   return api;
 });
